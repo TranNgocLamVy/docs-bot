@@ -20,8 +20,9 @@ from src.md_parser import article_to_markdown
 from src.scraper import fetch_articles
 from src.uploader import upload_changed_articles
 
-OUTPUT_DIR = Path("data/articles")
-MANIFEST_PATH = Path("data/state/articles_manifest.json")
+DATA_DIR = Path(os.getenv("DATA_DIR", "data"))
+OUTPUT_DIR = DATA_DIR / "articles"
+MANIFEST_PATH = DATA_DIR / "state" / "articles_manifest.json"
 
 def get_article_filename(article: dict) -> str:
     title = article.get("title") or str(article.get("id"))
