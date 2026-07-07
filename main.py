@@ -29,7 +29,7 @@ def get_article_filename(article: dict) -> str:
     article_id = article.get("id")
     return f"{slugify(title)}-{article_id}.md"
 
-def run() -> ChangeSet:
+def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
 
@@ -88,7 +88,6 @@ def run() -> ChangeSet:
 
     save_manifest(MANIFEST_PATH, next_manifest)
 
-    print("")
     print("Scrape/upload completed")
     print(f"added={len(change_set.added)}")
     print(f"updated={len(change_set.updated)}")
@@ -96,20 +95,11 @@ def run() -> ChangeSet:
     print(f"uploaded_files={upload_result.uploaded_count}")
     print(f"failed_uploads={upload_result.failed_count}")
     print(f"estimated_uploaded_chunks={upload_result.estimated_chunk_count}")
-    print(f"vector_store_id={upload_result.vector_store_id}")
 
     if upload_result.failed:
-        print("")
         print("Failed uploads:")
         for file_path, error in upload_result.failed:
             print(f"- {file_path}: {error}")
-
-    return change_set
-
-
-def main() -> None:
-    run()
-
 
 if __name__ == "__main__":
     main()

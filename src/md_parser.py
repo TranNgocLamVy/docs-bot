@@ -1,10 +1,10 @@
-from src.constant import BASE_URL
-
-from pathlib import Path
+import re
 from urllib.parse import urlparse
+
 from bs4 import BeautifulSoup
 from markdownify import markdownify as html_to_markdown
-import re
+
+from src.constant import BASE_URL
 
 def normalize_internal_link(href: str) -> str:
     if not href:

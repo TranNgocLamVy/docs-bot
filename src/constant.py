@@ -20,10 +20,10 @@ def get_int_env(name: str, default: int) -> int:
     try:
         value = int(raw_value)
     except ValueError as exc:
-        raise ValueError(f"{name} must be an integer, got: {raw_value}") from exc
+        return default
 
     if value <= 0:
-        raise ValueError(f"{name} must be greater than 0, got: {value}")
+        return default
 
     return value
 

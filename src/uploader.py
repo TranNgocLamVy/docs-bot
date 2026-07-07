@@ -15,10 +15,10 @@ from src.manifest import ArticleSnapshot
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 ENV_PATH = PROJECT_ROOT / ".env"
-load_dotenv(dotenv_path=ENV_PATH, override=True)
+load_dotenv(dotenv_path=ENV_PATH, override=False)
 
 DEFAULT_CHUNK_SIZE_TOKENS = 800
-DEFAULT_CHUNK_OVERLAP_TOKENS = 400
+DEFAULT_CHUNK_OVERLAP_TOKENS = 200
 
 @dataclass(frozen=True)
 class UploadedFileRecord:

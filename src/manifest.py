@@ -18,10 +18,10 @@ class ArticleSnapshot:
     content_hash: str
     local_path: str
 
-    openai_file_id: str = None
-    vector_store_file_id: str = None
-    estimated_chunk_count: int = None
-    uploaded_at_utc: str = None
+    openai_file_id: str | None = None
+    vector_store_file_id: str | None = None
+    estimated_chunk_count: int | None = None
+    uploaded_at_utc: str | None = None
 
 
 @dataclass
