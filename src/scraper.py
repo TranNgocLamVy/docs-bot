@@ -1,12 +1,13 @@
-from constant import BASE_URL, LOCALE, ARTICLE_LIST_SIZE, ARTICLE_FETCH_SIZE
-from utils import get_article_filename
+from src.constant import BASE_URL, ARTICLE_FETCH_SIZE
 
 from pathlib import Path
 import requests
 import time
 
+LOCALE = "en-us"
+
 def fetch_articles(limit: int = ARTICLE_FETCH_SIZE) -> list[dict]:
-    url = f"{BASE_URL}/api/v2/help_center/{LOCALE}/articles.json?page[size]={ARTICLE_LIST_SIZE}"
+    url = f"{BASE_URL}/api/v2/help_center/{LOCALE}/articles.json?page[size]={100}"
     articles: list[dict] = []
 
     while len(articles) < limit:
@@ -25,17 +26,3 @@ def fetch_articles(limit: int = ARTICLE_FETCH_SIZE) -> list[dict]:
             url = data.get("next_page")
 
     return articles[:limit]
-
-def main() -> None:
-    articles = fetch_articles()
-
-    OUTPUT_DIR = Path("data/raw")
-    
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-    for article in articles:
-        output_path = OUTPUT_DIR / get_article_filename(article)
-        output_path.write_text(str(article), encoding="utf-8")
-
-if __name__ == "__main__":
-    main()

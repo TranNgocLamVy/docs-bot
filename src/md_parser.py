@@ -1,6 +1,4 @@
-from utils import get_article_filename
-from constant import BASE_URL
-from scrapper import fetch_articles
+from src.constant import BASE_URL
 
 from pathlib import Path
 from urllib.parse import urlparse
@@ -79,21 +77,3 @@ Updated At: {updated_at}
 """
 
     return markdown_cleanup(markdown)
-
-
-def main() -> None:
-    articles = fetch_articles()
-
-    OUTPUT_DIR = Path("data/articles")
-    
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-    for article in articles:
-        markdown = article_to_markdown(article)
-        output_path = OUTPUT_DIR / get_article_filename(article)
-        output_path.write_text(markdown, encoding="utf-8")
-
-
-
-if __name__ == "__main__":
-    main()
