@@ -50,6 +50,10 @@ class UploadResult:
 
 def get_openai_client() -> OpenAI:
     api_key = os.getenv("OPENAI_API_KEY")
+
+    if not api_key:
+        raise RuntimeError("Missing OPENAI_API_KEY")
+
     return OpenAI(api_key=api_key)
 
 def get_or_create_vector_store(client: OpenAI) -> str:
@@ -58,7 +62,10 @@ def get_or_create_vector_store(client: OpenAI) -> str:
     if configured_id:
         return configured_id
 
-    target_name = os.getenv("OPENAI_VECTOR_STORE_NAME")
+    target_name = (os.getenv("OPENAI_VECTOR_STORE_NAME") or "").strip()
+
+    if not target_name:
+        raise RuntimeError("Set OPENAI_VECTOR_STORE_ID or OPENAI_VECTOR_STORE_NAME.")
 
     stores = client.vector_stores.list(limit=100)
 
@@ -67,7 +74,6 @@ def get_or_create_vector_store(client: OpenAI) -> str:
             return store.id
 
     vector_store = client.vector_stores.create(name=target_name)
-
     return vector_store.id
 
 def estimate_chunk_count(file_path: Path, *, chunk_size_tokens: int, chunk_overlap_tokens: int) -> int:
@@ -169,8 +175,8 @@ def upload_one_file(client: OpenAI, *, vector_store_id: str, snapshot: ArticleSn
         chunking_strategy={
             "type": "static",
             "static": {
-                "max_chunk_size_tokens": chunk_size_tokens,
-                "chunk_overlap_tokens": chunk_overlap_tokens,
+                "max_chunk_size_tokens": DEFAULT_CHUNK_SIZE_TOKENS,
+                "chunk_overlap_tokens": DEFAULT_CHUNK_OVERLAP_TOKENS,
             },
         },
     )

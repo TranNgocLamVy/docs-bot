@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
+from slugify import slugify
 from tqdm import tqdm
 
 from src.manifest import (
@@ -14,13 +16,12 @@ from src.manifest import (
     save_manifest,
     snapshot_with_upload_metadata
 )
-from src.constant import ARTICLE_FETCH_SIZE
 from src.md_parser import article_to_markdown
 from src.scraper import fetch_articles
 from src.uploader import upload_changed_articles
 
 OUTPUT_DIR = Path("data/articles")
-MANIFEST_PATH = Path("data/articles_manifest.json")
+MANIFEST_PATH = Path("data/state/articles_manifest.json")
 
 def get_article_filename(article: dict) -> str:
     title = article.get("title") or str(article.get("id"))
@@ -29,6 +30,7 @@ def get_article_filename(article: dict) -> str:
 
 def run() -> ChangeSet:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
 
     articles = fetch_articles()
 

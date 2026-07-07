@@ -2,4 +2,4 @@
 .env
 __pycache__/
 data/articles/
-data/articles_manifest.json
+data/state/articles_manifest.json
